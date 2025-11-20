@@ -16,8 +16,7 @@ export function Navigation({ activeTab, setActiveTab, isAuthenticated, onAuthCli
   const navItems = [
     { id: "problems", label: "Problems", icon: Code },
     { id: "contests", label: "Contests", icon: Trophy },
-    { id: "editor", label: "Editor", icon: BookOpen },
-    { id: "community", label: "Community", icon: MessageSquare }, // Corrected the id and label
+  { id: "editor", label: "Editor", icon: BookOpen },
   ]
 
   return (

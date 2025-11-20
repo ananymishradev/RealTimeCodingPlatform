@@ -151,10 +151,9 @@ export function ProblemExplorer() {
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <Tabs defaultValue="description" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="editorial">Editorial</TabsTrigger>
-                <TabsTrigger value="discussions">Discussions</TabsTrigger>
               </TabsList>
 
               <TabsContent value="description" className="space-y-6">
@@ -212,18 +211,7 @@ export function ProblemExplorer() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="discussions">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Community Discussions</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      Community discussions and solutions would be displayed here.
-                    </p>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+              {/* Discussions tab removed as community forum feature is deprecated */}
             </Tabs>
           </div>
 

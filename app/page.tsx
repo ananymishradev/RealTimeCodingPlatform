@@ -6,7 +6,6 @@ import { ProblemExplorer } from "@/components/problem-explorer"
 import { CodeEditor } from "@/components/code-editor"
 import { ContestDashboard } from "@/components/contest-dashboard"
 import { UserDashboard } from "@/components/user-dashboard"
-import { CommunityForum } from "@/components/community-forum"
 import { AuthModal } from "@/components/auth-modal"
 
 export default function CodingPlatform() {
@@ -24,8 +23,7 @@ export default function CodingPlatform() {
         return <CodeEditor />
       case "dashboard":
         return <UserDashboard />
-      case "community":
-        return <CommunityForum />
+      // "community" tab removed
       default:
         return <ProblemExplorer />
     }
