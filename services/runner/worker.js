@@ -28,7 +28,12 @@ function languageToImageAndCmd(language, filename) {
     case 'c++':
     case 'c':
       // compile then run
-      return { image: 'gcc:12', cmd: `g++ ${filename} -O2 -o a.out && ./a.out` }
+      return { image: 'gcc:12', cmd: `g++ ${filename} -O2 -o a.out && ./a.out`, defaultTimeoutMs: 10000 }
+    case 'java':
+    case 'javac':
+    case 'jar':
+      // write to Main.java and expect a Main class
+      return { image: 'openjdk:20-slim', cmd: `javac ${filename} && java Main`, defaultTimeoutMs: 10000 }
     default:
       return null
   }

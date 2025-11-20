@@ -8,6 +8,12 @@ What it does
 - Run the worker with `pnpm run runner:start` (or `npm run runner:start`). The worker polls `data/jobs` and will process jobs.
 - Results are written to `data/results/<id>.json` and the worker workspace is created at `data/work/<id>/`.
 
+Supported languages (prototype):
+- JavaScript / Node (image: `node:20-bullseye`)
+- Python 3 (image: `python:3.11-slim`)
+- C / C++ (image: `gcc:12`)
+- Java (image: `openjdk:20-slim`) — code should be available as `Main.java` containing a `public static void main` entrypoint (the runner writes `Main.java` for submitted Java jobs).
+
 Notes and requirements
 - Docker must be installed and the user running the worker must be able to run `docker` without sudo (or run the worker with permissions).
 - This is a local prototype. For production use, migrate to a proper queue (Redis + BullMQ), add authentication, harden images, and consider microVM isolation (Firecracker) for multi-tenant setups.
