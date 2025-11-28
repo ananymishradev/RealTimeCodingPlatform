@@ -1,0 +1,9 @@
+{
+  "id": "f242540a-0ba9-42b2-a0c0-3338a6995694",
+  "status": "FINISHED",
+  "exitCode": 0,
+  "stdout": "hello from manual job\n",
+  "stderr": "",
+  "runtimeMs": 4000,
+  "finishedAt": 1763643399993
+}
