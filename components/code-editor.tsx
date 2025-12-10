@@ -102,6 +102,79 @@ export function CodeEditor() {
   const [fontSize, setFontSize] = useState("14")
   const [theme, setTheme] = useState("dark")
 
+  const submitJob = async ({
+    language,
+    source,
+    stdin,
+    timeLimitMs = 5000,
+  }: {
+    language: string
+    source: string
+    stdin?: string
+    timeLimitMs?: number
+  }) => {
+    const response = await fetch("/api/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ language, code: source, stdin: stdin ?? "", timeLimitMs }),
+    })
+
+    if (!response.ok) {
+      const errText = await response.text()
+      throw new Error(errText || "Failed to submit code for execution")
+    }
+
+    const data = await response.json()
+    if (!data.jobId) {
+      throw new Error("Runner did not return a job id")
+    }
+    return data.jobId as string
+  }
+
+  const pollJobResult = async (jobId: string) => {
+    const maxAttempts = 40
+    const delay = 500
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const response = await fetch(`/api/job/${jobId}`)
+      if (response.status === 404) {
+        await new Promise((resolve) => setTimeout(resolve, delay))
+        continue
+      }
+      if (!response.ok) {
+        const errText = await response.text()
+        throw new Error(errText || "Failed to fetch job status")
+      }
+
+      const data = await response.json()
+      if (data?.status && data.status !== "PENDING") {
+        return data
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, delay))
+    }
+
+    throw new Error("Timed out while waiting for the runner to finish")
+  }
+
+  const formatResultOutput = (result: any) => {
+    const lines: string[] = []
+    lines.push(`Status: ${result.status ?? "UNKNOWN"}`)
+    if (typeof result.exitCode === "number") {
+      lines.push(`Exit Code: ${result.exitCode}`)
+    }
+    if (result.runtimeMs) {
+      lines.push(`Time Limit: ${result.runtimeMs} ms`)
+    }
+    if (result.stdout) {
+      lines.push("\nstdout:\n" + result.stdout)
+    }
+    if (result.stderr) {
+      lines.push("\nstderr:\n" + result.stderr)
+    }
+    return lines.join("\n")
+  }
+
   const handleLanguageChange = (language: string) => {
     setSelectedLanguage(language)
     setCode(languageTemplates[language as keyof typeof languageTemplates])
@@ -109,32 +182,44 @@ export function CodeEditor() {
 
   const handleRunCode = async () => {
     setIsRunning(true)
-    setOutput("")
+    setOutput("Running your code in the SyntaxSniper runner...")
 
-    // Simulate code execution
-    setTimeout(() => {
-      setOutput(
-        `Running code with custom input...\n\nOutput:\nHello World!\n\nExecution time: 0.045s\nMemory usage: 14.2 MB`,
-      )
+    try {
+      const jobId = await submitJob({ language: selectedLanguage, source: code, stdin: customInput })
+      const result = await pollJobResult(jobId)
+      setOutput(formatResultOutput(result))
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to run code"
+      setOutput(`Error: ${message}`)
+    } finally {
       setIsRunning(false)
-    }, 2000)
+    }
   }
 
   const handleSubmitCode = async () => {
     setIsSubmitting(true)
     setTestResults([])
+    setOutput("Submitting to judge...")
 
-    // Simulate test case execution
-    setTimeout(() => {
-      const results = mockProblem.testCases.map((testCase, index) => ({
-        passed: Math.random() > 0.3, // Simulate some passing, some failing
-        input: testCase.input,
-        expected: testCase.expectedOutput,
-        actual: index === 0 ? "[0,1]" : index === 1 ? "[1,2]" : "[0,1]",
-      }))
-      setTestResults(results)
+    try {
+      const jobId = await submitJob({ language: selectedLanguage, source: code, stdin: customInput })
+      const result = await pollJobResult(jobId)
+      setOutput(formatResultOutput(result))
+
+      setTestResults([
+        {
+          passed: result.exitCode === 0 && (!result.stderr || result.stderr.trim() === ""),
+          input: customInput || "No custom input",
+          expected: "Program should exit with code 0",
+          actual: (result.stdout || result.stderr || "(no output)").trim(),
+        },
+      ])
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Failed to submit code"
+      setOutput(`Error: ${message}`)
+    } finally {
       setIsSubmitting(false)
-    }, 3000)
+    }
   }
 
   const handleResetCode = () => {
