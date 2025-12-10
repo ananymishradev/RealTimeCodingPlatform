@@ -88,6 +88,9 @@ const mockProblem = {
   ],
 }
 
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(/\/$/, "")
+const buildApiUrl = (path: string) => `${API_BASE_URL}${path}`
+
 export function CodeEditor() {
   const [selectedLanguage, setSelectedLanguage] = useState("python")
   const [code, setCode] = useState(languageTemplates.python)
@@ -113,7 +116,7 @@ export function CodeEditor() {
     stdin?: string
     timeLimitMs?: number
   }) => {
-    const response = await fetch("/api/submit", {
+    const response = await fetch(buildApiUrl("/api/submit"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ language, code: source, stdin: stdin ?? "", timeLimitMs }),
@@ -136,7 +139,7 @@ export function CodeEditor() {
     const delay = 500
 
     for (let attempt = 0; attempt < maxAttempts; attempt++) {
-      const response = await fetch(`/api/job/${jobId}`)
+      const response = await fetch(buildApiUrl(`/api/job/${jobId}`))
       if (response.status === 404) {
         await new Promise((resolve) => setTimeout(resolve, delay))
         continue
