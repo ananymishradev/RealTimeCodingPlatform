@@ -28,7 +28,7 @@ export function Navigation({ activeTab, setActiveTab, isAuthenticated, onAuthCli
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <Code className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">CodePlatform</span>
+            <span className="text-xl font-bold">SyntaxSniper</span>
           </div>
 
           {/* Navigation Links */}

@@ -50,7 +50,7 @@ export function AuthModal({ onClose, onAuthenticated }: AuthModalProps) {
     <Dialog open={true} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl font-bold">Welcome to CodePlatform</DialogTitle>
+          <DialogTitle className="text-center text-2xl font-bold">Welcome to SyntaxSniper</DialogTitle>
         </DialogHeader>
 
         <Tabs defaultValue="login" className="w-full">
