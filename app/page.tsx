@@ -8,7 +8,7 @@ import { ContestDashboard } from "@/components/contest-dashboard"
 import { UserDashboard } from "@/components/user-dashboard"
 import { AuthModal } from "@/components/auth-modal"
 
-export default function CodingPlatform() {
+export default function SyntaxSniperPage() {
   const [activeTab, setActiveTab] = useState("problems")
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [showAuthModal, setShowAuthModal] = useState(false)
@@ -40,32 +40,35 @@ export default function CodingPlatform() {
         />
       </header>
 
-      <main className="relative isolate">
+      <main className="relative isolate flex min-h-[calc(100vh-4rem)] flex-col justify-center">
         <div className="pointer-events-none absolute inset-0 opacity-60">
           <div className="gradient-ring" />
         </div>
 
-        <section className="relative mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-16 pt-24 sm:px-8">
+        <section className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 pb-20 pt-24 sm:px-8 lg:pt-32">
           <div className="flex flex-col gap-3 text-left">
-            <p className="text-xs uppercase tracking-[0.4em] text-muted-foreground">Realtime coding suite</p>
+            <p className="text-xs uppercase tracking-[0.45em] text-muted-foreground">SyntaxSniper platform</p>
             <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
-              Build, test, and compete inside a matte-black cockpit.
+              SyntaxSniper keeps every challenge locked in your sights.
             </h1>
             <p className="max-w-2xl text-base text-muted-foreground">
-              Swap between the explorer, contests, editor, and dashboard without losing focus. Everything lives in one
-              streamlined surface.
+              Toggle between explorer, contests, editor, and insights without losing flow. One cockpit, zero drift.
             </p>
           </div>
 
-          <article className="rounded-2xl border border-border/70 bg-card/80 p-4 shadow-xl shadow-black/60">
+          <article className="flex-1 rounded-2xl border border-border/70 bg-card/80 p-4 shadow-xl shadow-black/60">
             {renderContent()}
           </article>
         </section>
       </main>
 
       <footer className="border-t border-border/40 bg-card/60 px-6 py-6 text-center text-sm text-muted-foreground">
-        <p>
-          Crafted for deep-focus problem solving. Need an update? <button className="underline" onClick={() => setShowAuthModal(true)}>Sign in</button>
+        <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+          <span>SyntaxSniper is built for relentless iteration.</span>
+          <span>Copyright Anany.</span>
+          <button className="underline" onClick={() => setShowAuthModal(true)}>
+            Sign in
+          </button>
         </p>
       </footer>
 
